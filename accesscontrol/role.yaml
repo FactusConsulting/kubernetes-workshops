@@ -1,10 +1,56 @@
+# kind: Role
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   namespace: hotlaps-test
+#   name: custom-edit-role
+# rules:
+#   # You can include whatever API groups and resources you want the user to have access to.
+#   # This is just an example.
+#   - apiGroups: [""]
+#     resources:
+#       [
+#         "pods",
+#         "services",
+#         "endpoints",
+#         "persistentvolumeclaims",
+#         "events",
+#         "configmaps",
+#         "secrets",
+#       ]
+#     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+#   - apiGroups: ["apps"]
+#     resources: ["deployments", "replicasets", "statefulsets"]
+#     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+# # You might need to add more rules depending on what resources you want the user to be able to manage.
+
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: RoleBinding
+# metadata:
+#   name: lars-factus-custom-edit
+#   namespace: hotlaps-dev
+# subjects:
+#   - kind: User
+#     name: lars@factus.dk
+#     apiGroup: rbac.authorization.k8s.io
+# roleRef:
+#   kind: Role
+#   name: custom-edit-role
+#   apiGroup: rbac.authorization.k8s.io
+
+---
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
 metadata:
-  namespace: hotlaps-test
-  name: dev-edit
+  name: namespace-editor
 rules:
-  - apiGroups: ["*"]
+  - apiGroups: [""]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["batch"]
     resources: ["*"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 
@@ -12,28 +58,17 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: lars-edit
+  name: lars-factus-namespace-editor
   namespace: hotlaps-test
 subjects:
   - kind: User
     name: lars@factus.dk
     apiGroup: rbac.authorization.k8s.io
-roleRef:
-  kind: Role
-  name: dev-edit
-  apiGroup: rbac.authorization.k8s.io
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: lars-wolfgang-edit
-  namespace: hotlaps-test
-subjects:
   - kind: User
     name: lars@wolfgang-andersen.dk
     apiGroup: rbac.authorization.k8s.io
+
 roleRef:
-  kind: Role
-  name: dev-edit
+  kind: ClusterRole
+  name: namespace-editor
   apiGroup: rbac.authorization.k8s.io
