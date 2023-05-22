@@ -50,7 +50,16 @@ RKE2 ... the config.yaml file
 
 ## Alternatives to Azure AD
 
+Looks REALLY interesting:  <https://pinniped.dev/>
+
 Hosted in the cluster ... username and passwords ... <https://www.keycloak.org/getting-started/getting-started-kube>
+
+OLD SCHOOL LDAP FTW: <https://learnk8s.io/kubernetes-custom-authentication>
+
+OIDC tokens issued in the cluster instead of in kubectl? Seems a little half baked but promising.  <https://artifacthub.io/packages/helm/devopstales/kube-openid-connect>  <https://github.com/devopstales/kube-openid-connect>
+
+Teleport is the full external access to any resource. Including K8s
+<https://edidiongasikpo.com/how-to-give-developers-secure-access-to-kubernetes-clusters>
 
 ## Quality of life for RBAC
 
