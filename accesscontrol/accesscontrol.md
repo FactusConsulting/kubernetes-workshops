@@ -51,3 +51,13 @@ RKE2 ... the config.yaml file
 ## Alternatives to Azure AD
 
 Hosted in the cluster ... username and passwords ... <https://www.keycloak.org/getting-started/getting-started-kube>
+
+## Quality of life for RBAC
+
+RBAC-Manager and RBAC inspection
+
+<https://github.com/FairwindsOps/rbac-manager>
+<https://rbac-manager.docs.fairwinds.com/introduction/#dynamic-namespaces-and-labels>
+
+`helm repo add fairwinds-stable https://charts.fairwinds.com/stable`
+`helm install rbac-manager fairwinds-stable/rbac-manager --namespace rbac-manager --create-namespace`
