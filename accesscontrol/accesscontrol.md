@@ -48,6 +48,8 @@ RKE2 ... the config.yaml file
 
 `kubectl --user=oidc get nodes`
 
+`kubectl config set-context somecontext --user=oidc`
+
 ## Alternatives to Azure AD
 
 Looks REALLY interesting:  <https://pinniped.dev/>
