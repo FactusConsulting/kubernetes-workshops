@@ -2,13 +2,58 @@
 
 ## Install the controlplane
 
+
+docker run -d --restart=unless-stopped -p 8080:80 -p 44300:443 --privileged rancher/rancher:latest
+
 ```helm
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 helm repo update
-helm install rancher rancher-latest/rancher --namespace cattle-system --set hostname=rd.local --set bootstrapPassword=admin --set ingress.annotations."kubernetes.io/ingress.class"="nginx" --set global.cattle.psp.enabled=false --create-namespace
+helm upgrade --install rancher rancher-latest/rancher --namespace cattle-system --set hostname=rd.local --set bootstrapPassword=admin --set ingress.ingressClassName=nginx --set global.cattle.psp.enabled=false --create-namespace --set ingress.annotations."cert-manager\.io/cluster-issuer"="ca-issuer" --set ingress.labels."cert-manager\.io/cluster-issuer"="true" --set ingress.labels."cert-manager\.io/inject-ca-from"="ca-issuer"  --set certmanager.create=false
+
+
+helm uninstall rancher -n cattle-system
+
 
 ```
 
 ## AzureAD integration
 
 <https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-azure-ad>
+
+
+
+## Adopting a vagrant cluster
+
+Edit the deployment to add
+
+hostAliases:
+  - ip: "172.23.4.7"
+    hostnames:
+    - "rd.local"
+
+sudo /var/lib/rancher/rke2/bin/kubectl edit deployment cattle-cluster-agent -n cattle-system --kubeconfig /etc/rancher/rke2/rke2.yaml
+
+
+## Rancher vagrant config
+
+admin_password: adminPassword
+rancher_version: v2.7.3
+ROS_version: 1.5.1
+# Empty defaults to latest non-experimental available
+k8s_version: "v1.23.16-rancher2-1"
+server:
+  cpus: 4
+  memory: 6000
+node:
+  count: 1
+  cpus: 4
+  memory: 4500
+  open-iscsi: disabled
+ip:
+  master: 192.168.56.100
+  server: 192.168.56.101
+  node: 192.168.56.111
+linked_clones: true
+net:
+  private_nic_type: 82545EM
+  network_type: private_network
