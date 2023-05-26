@@ -2,8 +2,11 @@
 
 ## Install the controlplane
 
+### Docker
 
-docker run -d --restart=unless-stopped -p 8080:80 -p 44300:443 --privileged rancher/rancher:latest
+`docker run -d --restart=unless-stopped -p 8080:80 -p 44300:443 --privileged rancher/rancher:latest`
+
+### Helm
 
 ```helm
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
@@ -13,29 +16,17 @@ helm upgrade --install rancher rancher-latest/rancher --namespace cattle-system 
 
 helm uninstall rancher -n cattle-system
 
-
 ```
 
-## AzureAD integration
+### Vagrant
 
-<https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-azure-ad>
+<https://ranchermanager.docs.rancher.com/getting-started/quick-start-guides/deploy-rancher-manager/vagrant>
 
+`git clone https://github.com/rancher/quickstart`
 
+Use this configuration instead of default one
 
-## Adopting a vagrant cluster
-
-Edit the deployment to add
-
-hostAliases:
-  - ip: "172.23.4.7"
-    hostnames:
-    - "rd.local"
-
-sudo /var/lib/rancher/rke2/bin/kubectl edit deployment cattle-cluster-agent -n cattle-system --kubeconfig /etc/rancher/rke2/rke2.yaml
-
-
-## Rancher vagrant config
-
+```yaml
 admin_password: adminPassword
 rancher_version: v2.7.3
 ROS_version: 1.5.1
@@ -57,3 +48,22 @@ linked_clones: true
 net:
   private_nic_type: 82545EM
   network_type: private_network
+```
+
+## AzureAD integration
+
+<https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-azure-ad>
+
+
+## Adopting a vagrant cluster from vagrantk8s
+
+Edit the deployment to add
+
+hostAliases:
+  - ip: "172.23.4.7"
+    hostnames:
+    - "rd.local"
+
+sudo /var/lib/rancher/rke2/bin/kubectl edit deployment cattle-cluster-agent -n cattle-system --kubeconfig /etc/rancher/rke2/rke2.yaml
+
+
